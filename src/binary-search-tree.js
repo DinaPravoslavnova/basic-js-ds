@@ -1,5 +1,3 @@
-const { NotImplementedError } = require('../extensions/index.js');
-
 const { Node } = require('../extensions/list-tree.js');
 
 /**
@@ -76,9 +74,45 @@ class BinarySearchTree {
     return null;
   }
 
-  remove(/* data */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  remove(data) {
+    let removeNode = this.rootNode,
+      parentNode,
+      childNode;
+
+    while (removeNode && removeNode.data !== data) {
+      parentNode = removeNode;
+      if (data > removeNode.data) {
+        removeNode = removeNode.right;
+      } else {
+        removeNode = removeNode.left;
+      }
+    }
+
+    if (removeNode.left && removeNode.right) {
+      let minFromRight = removeNode.right;
+      let minParent = removeNode;
+
+      while (minFromRight.left) {
+        minParent = minFromRight;
+        minFromRight = minFromRight.left;
+      }
+
+      removeNode.data = minFromRight.data;
+      removeNode = minFromRight;
+      parentNode = minParent;
+    }
+
+    if (removeNode.left) {
+      childNode = removeNode.left;
+    } else {
+      childNode = removeNode.right;
+    }
+
+    if (parentNode.left === removeNode) {
+      parentNode.left = childNode;
+    } else {
+      parentNode.right = childNode;
+    }
   }
 
   min() {
